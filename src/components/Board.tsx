@@ -7,68 +7,59 @@ import { DraxProvider, DraxView } from 'react-native-drax';
 
 import {Button} from 'react-native';
 import styled from 'styled-components/native';
-
-const ROWS = 11;
-const COLUMNS = 10;
-
-let board: number[][] = new Array<Array<number>>(ROWS);
-for (let i = 0; i < ROWS; i++) {
-  board[i] = new Array<number>(COLUMNS).fill(0);
-}
+import {createBoard, placePiece, getMovableBoard} from '../logic/Blox';
 
 const Board = () => {
 
-  const [gameBoard, setGameBoard] = useState(board);
-
   const [shape, setShape] = useState(new UShape());
+  const [gameBoard, setGameBoard] = useState(createBoard());
+  const [movableBoard, setMovableBoard] = useState(getMovableBoard(gameBoard, shape));
 
+  const rotatePiece = (direction: Direction) => {
+    const piece = rotate(shape, direction);
+    setShape(piece);
+    setMovableBoard(getMovableBoard(gameBoard, piece));
+  };
 
-   return (
-      <GestureHandlerRootView>
-        <DraxProvider>
-          <View>
-            {
-              gameBoard.map((row: number[], index: number) => {
-                return (
-                  <Row key={`row-${index}`}>
-                    {                   
-                      row.map((column: number, indexCol: number) => {
-                        return (
-                          <DraxView onReceiveDragDrop={({ dragged: { payload } }) => {
-                            const newBoard = [...gameBoard];
-                            const formation = payload.block.formation;
-                            const yAdjustment = ROWS < (index + formation.length) ? Math.abs(ROWS - (index + formation.length)) : 0
-                            const xAdjustment = COLUMNS < (indexCol + formation[0].length) ? Math.abs(COLUMNS - (indexCol + formation[0].length)) : 0
-                            for (let y = index; y < index + formation.length; y++) {
-                              for (let x = indexCol; x < indexCol + formation[0].length; x++) {
-                                if (formation[y-index][x-indexCol] > 0) {
-                                  newBoard[y-yAdjustment][x-xAdjustment] = formation[y-index][x-indexCol];
-                                }
-                              }
-                            }
+  return (
+    <GestureHandlerRootView>
+      <DraxProvider>
+        <View>
+          {
+            gameBoard.map((row: number[], index: number) => {
+              return (
+                <Row key={`row-${index}`}>
+                  {                   
+                    row.map((column: number, indexCol: number) => {
+                      return (
+                        <DraxView onReceiveDragDrop={({ dragged: { payload } }) => {
+                          if (movableBoard[index][indexCol]) {
+                            const newBoard = placePiece(gameBoard, payload, index, indexCol);
                             setGameBoard(newBoard);
-                          }} key={`drax-${index}-${indexCol}`}>
-                            <Square color={column} key={`col-${index}-${indexCol}`}/>
-                          </DraxView>
-                        )
-                      })
-                    }
-                  </Row>
-                )
-              })
-            }
-              
-          </View>
-          <View>
-            <DraxView payload={shape}>
-              <Piece shape={shape} />
-            </DraxView>
-            <Button onPress={() => setShape(rotate(shape, Direction.CLOCKWISE))} title='Rotate Clockwise' />
-            <Button onPress={() => setShape(rotate(shape, Direction.COUNTERCLOCKWISE))} title='Rotate Counterclockwise' />
-          </View>
-        </DraxProvider>
-      </GestureHandlerRootView>
-   );
+                            setMovableBoard(getMovableBoard(newBoard, shape));
+                          }
+                        }} key={`drax-${index}-${indexCol}`}>
+                          <Square color={column} movable={movableBoard[index][indexCol]} key={`col-${index}-${indexCol}`}/>
+                        </DraxView>
+                      )
+                    })
+                  }
+                </Row>
+              )
+            })
+          }
+            
+        </View>
+        <View>
+          <DraxView payload={shape}>
+            <Piece shape={shape} />
+          </DraxView>
+          <Button onPress={() => rotatePiece(Direction.CLOCKWISE)} title='Rotate Clockwise' />
+          <Button onPress={() => rotatePiece(Direction.COUNTERCLOCKWISE)} title='Rotate Counterclockwise' />
+        </View>
+      </DraxProvider>
+    </GestureHandlerRootView>
+  );
 };
 
 const View = styled.View`

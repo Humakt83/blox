@@ -4,7 +4,7 @@ import { Shape } from '../logic/Block';
 import Square from './Square';
 
 type Props = {
-  shape: Shape
+  shape: Shape,
 }
 
 const Piece : React.FC<Props> = ({shape}) => {

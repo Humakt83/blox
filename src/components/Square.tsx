@@ -4,17 +4,18 @@ import styled from 'styled-components/native';
 const COLOR_MAP = ['white', 'red'];
 
 type Props = {
-  color: number;
+  color?: number;
+  movable?: boolean;
 }
 
-const Square: React.FC<Props> = ({color = 0}) => {
+const Square: React.FC<Props> = ({color = 0, movable = false}) => {
 
   const opacity = color === -1 ? 0 : 1;
 
   const View = styled.View`
     width: 30px;
     height: 30px;
-    background: ${COLOR_MAP[Math.max(0, color)]};
+    background: ${movable? 'yellow' : COLOR_MAP[Math.max(0, color)]};
     border: 1px solid black;
     opacity: ${opacity}
   `;
