@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import Square from './Square';
 import Piece from './Piece';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {UShape, rotate, Direction} from '../logic/Block';
+import { DraxProvider, DraxView } from 'react-native-drax';
 
 import {Button} from 'react-native';
 import styled from 'styled-components/native';
@@ -10,38 +12,60 @@ const ROWS = 11;
 const COLUMNS = 10;
 
 let board: number[][] = new Array<Array<number>>(ROWS);
-board = board.fill(new Array<number>(COLUMNS).fill(0));
+for (let i = 0; i < ROWS; i++) {
+  board[i] = new Array<number>(COLUMNS).fill(0);
+}
 
 const Board = () => {
 
+  const [gameBoard, setGameBoard] = useState(board);
+
   const [shape, setShape] = useState(new UShape());
 
+
    return (
-      <>
-        <View>
-          {
-            board.map((row: number[], index: Number) => {
-              return (
-                <Row key={`row-${index}`}>
-                  {                   
-                    row.map((column: number, indexCol: Number) => {
-                      return (
-                        <Square color={column} key={`col-${index}-${indexCol}`}/>
-                      )
-                    })
-                  }
-                </Row>
-              )
-            })
-          }
-            
-        </View>
-        <View>
-          <Piece shape={shape} />
-          <Button onPress={() => setShape(rotate(shape, Direction.CLOCKWISE))} title='Rotate Clockwise' />
-          <Button onPress={() => setShape(rotate(shape, Direction.COUNTERCLOCKWISE))} title='Rotate Counterclockwise' />
-        </View>
-      </>
+      <GestureHandlerRootView>
+        <DraxProvider>
+          <View>
+            {
+              gameBoard.map((row: number[], index: number) => {
+                return (
+                  <Row key={`row-${index}`}>
+                    {                   
+                      row.map((column: number, indexCol: number) => {
+                        return (
+                          <DraxView onReceiveDragDrop={({ dragged: { payload } }) => {
+                            const newBoard = [...gameBoard];
+                            const formation = payload.block.formation;
+                            for (let y = index; y < index + formation.length; y++) {
+                              for (let x = indexCol; x < indexCol + formation[0].length; x++) {
+                                if (formation[y-index][x-indexCol] > 0) {
+                                  newBoard[y][x] = formation[y-index][x-indexCol];
+                                }
+                              }
+                            }
+                            setGameBoard(newBoard);
+                          }} key={`drax-${index}-${indexCol}`}>
+                            <Square color={column} key={`col-${index}-${indexCol}`}/>
+                          </DraxView>
+                        )
+                      })
+                    }
+                  </Row>
+                )
+              })
+            }
+              
+          </View>
+          <View>
+            <DraxView payload={shape}>
+              <Piece shape={shape} />
+            </DraxView>
+            <Button onPress={() => setShape(rotate(shape, Direction.CLOCKWISE))} title='Rotate Clockwise' />
+            <Button onPress={() => setShape(rotate(shape, Direction.COUNTERCLOCKWISE))} title='Rotate Counterclockwise' />
+          </View>
+        </DraxProvider>
+      </GestureHandlerRootView>
    );
 };
 
