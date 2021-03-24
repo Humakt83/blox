@@ -23,9 +23,9 @@ export class TShape implements Shape {
 
 export class LShape implements Shape {
   block: Block = new Block([
-    [-1, 1, -1],
-    [-1, 1, -1],
-    [-1, 1, 1]
+    [1, -1, -1],
+    [1, -1, -1],
+    [1, 1, 1]
     ]);
 }
 
@@ -48,4 +48,9 @@ export function rotate(shape: Shape, direction: Direction): Shape {
     ? reverse(transpose(shape.block.formation))
     : transpose(reverse(shape.block.formation));
   return Object.assign({}, shape, {block: new Block(formation)});
+}
+
+export function randomShape(): Shape {
+  const shapes = [TShape, LShape, UShape];
+  return new shapes[Math.floor(Math.random() * shapes.length)]();
 }
