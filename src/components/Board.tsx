@@ -37,10 +37,12 @@ const Board = () => {
                           <DraxView onReceiveDragDrop={({ dragged: { payload } }) => {
                             const newBoard = [...gameBoard];
                             const formation = payload.block.formation;
+                            const yAdjustment = ROWS < (index + formation.length) ? Math.abs(ROWS - (index + formation.length)) : 0
+                            const xAdjustment = COLUMNS < (indexCol + formation[0].length) ? Math.abs(COLUMNS - (indexCol + formation[0].length)) : 0
                             for (let y = index; y < index + formation.length; y++) {
                               for (let x = indexCol; x < indexCol + formation[0].length; x++) {
                                 if (formation[y-index][x-indexCol] > 0) {
-                                  newBoard[y][x] = formation[y-index][x-indexCol];
+                                  newBoard[y-yAdjustment][x-xAdjustment] = formation[y-index][x-indexCol];
                                 }
                               }
                             }
