@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Square from './Square';
 import Piece from './Piece';
-import {UShape} from '../logic/Block';
+import {UShape, rotate, Direction} from '../logic/Block';
 
+import {Button} from 'react-native';
 import styled from 'styled-components/native';
 
 const ROWS = 11;
@@ -12,6 +13,8 @@ let board: number[][] = new Array<Array<number>>(ROWS);
 board = board.fill(new Array<number>(COLUMNS).fill(0));
 
 const Board = () => {
+
+  const [shape, setShape] = useState(new UShape());
 
    return (
       <>
@@ -34,7 +37,9 @@ const Board = () => {
             
         </View>
         <View>
-          <Piece shape={new UShape()} />
+          <Piece shape={shape} />
+          <Button onPress={() => setShape(rotate(shape, Direction.CLOCKWISE))} title='Rotate Clockwise' />
+          <Button onPress={() => setShape(rotate(shape, Direction.COUNTERCLOCKWISE))} title='Rotate Counterclockwise' />
         </View>
       </>
    );
