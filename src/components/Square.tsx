@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-const COLOR_MAP = ['white', 'red'];
+const COLOR_MAP = ['white', 'red', 'black'];
 
 type Props = {
   x?: number,

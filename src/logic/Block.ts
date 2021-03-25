@@ -14,27 +14,39 @@ export interface Shape {
 }
 
 export class TShape implements Shape {
-  block: Block = new Block([
-    [1, 1, 1],
-    [-1, 1, -1],
-    [-1, 1, -1]
-    ]);
+  block: Block;
+
+  constructor(color: number = 1) {
+    this.block = new Block([
+      [color, color, color],
+      [-1, color, -1],
+      [-1, color, -1]
+      ]);
+  }
 }
 
 export class LShape implements Shape {
-  block: Block = new Block([
-    [1, -1, -1],
-    [1, -1, -1],
-    [1, 1, 1]
+  block: Block;
+
+  constructor(color: number = 1) {
+    this.block = new Block([
+      [color, -1, -1],
+      [color, -1, -1],
+      [color, color, color]
     ]);
+  }  
 }
 
 export class UShape implements Shape {
-  block: Block = new Block([
-    [1, -1, 1],
-    [1, -1, 1],
-    [1, 1, 1]
-    ]);
+  block: Block;
+
+  constructor(color: number = 1) {
+    this.block = new Block([
+      [color, -1, color],
+      [color, -1, color],
+      [color, color, color]
+      ]);
+  }
 }
 
 export enum Direction {
@@ -50,7 +62,7 @@ export function rotate(shape: Shape, direction: Direction): Shape {
   return Object.assign({}, shape, {block: new Block(formation)});
 }
 
-export function randomShape(): Shape {
+export function randomShape(color: number = 1): Shape {
   const shapes = [TShape, LShape, UShape];
-  return new shapes[Math.floor(Math.random() * shapes.length)]();
+  return new shapes[Math.floor(Math.random() * shapes.length)](color);
 }

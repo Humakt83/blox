@@ -10,7 +10,7 @@ export function createBoard(): number[][] {
 }
 
 export function placePiece(board: number[][], piece: Shape, row: number, column: number, 
-    yModifier: number, xModifier: number): number[][] {
+    yModifier: number = 0, xModifier: number = 0): number[][] {
   const newBoard = [...board];
   const formation = piece.block.formation;
   for (let y = row; y < row + formation.length; y++) {
@@ -48,7 +48,7 @@ function sliceASlot(board: number[][], formation: number[][],
   return boardSlot;
 }
 
-export function getMovableBoard(board: number[][], piece:Shape, yModifier: number, xModifier: number): boolean[][] {
+export function getMovableBoard(board: number[][], piece:Shape, yModifier: number = 0, xModifier: number = 0): boolean[][] {
   const movableBoard: boolean[][] = getEmptyMovableBoard();
   const formation = piece.block.formation;
   board.forEach((row: number[], y: number) => {

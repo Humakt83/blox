@@ -8,6 +8,7 @@ import { DraxProvider, DraxView } from 'react-native-drax';
 import {Button} from 'react-native';
 import styled from 'styled-components/native';
 import {createBoard, placePiece, getMovableBoard, getEmptyMovableBoard} from '../logic/Blox';
+import {makeAIMove} from '../logic/AI';
 
 const Board = () => {
 
@@ -23,7 +24,8 @@ const Board = () => {
   const putPiece = (payload: Shape, row: number, column: number) => {
     if (movableBoard[row][column]) {
       const {x, y} = partOfPieceDragged;
-      const newBoard = placePiece(gameBoard, payload, row, column, y, x);
+      let newBoard = placePiece(gameBoard, payload, row, column, y, x);
+      newBoard = makeAIMove(newBoard);
       setGameBoard(newBoard);
       const piece = randomShape();
       setShape(piece);
