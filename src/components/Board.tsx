@@ -31,12 +31,16 @@ const Board = () => {
       setShape(piece);
       setMovableBoard(getEmptyMovableBoard());
     }
-  }
+  };
 
   const restart = () => {
     setGameBoard(createBoard());
     setShape(randomShape());
-  }
+  };
+
+  const skip = () => {
+    setGameBoard(makeAIMove(gameBoard));
+  };
 
   return (
     <GestureHandlerRootView>
@@ -72,6 +76,7 @@ const Board = () => {
           <Button onPress={() => rotatePiece(Direction.CLOCKWISE)} title='Rotate Clockwise' />
           <Button onPress={() => rotatePiece(Direction.COUNTERCLOCKWISE)} title='Rotate Counterclockwise' />
           <Button onPress={restart} title="Restart"/>
+          <Button onPress={skip} title="Skip"/>
         </View>
       </DraxProvider>
     </GestureHandlerRootView>
