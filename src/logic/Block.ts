@@ -49,6 +49,29 @@ export class UShape implements Shape {
   }
 }
 
+export class BlockShape implements Shape {
+  block: Block;
+  
+  constructor(color: number = 1) {
+    this.block = new Block([
+      [color, color],
+      [color, color],
+      ]);
+  }
+}
+
+export class IShape implements Shape {
+  block: Block;
+  
+  constructor(color: number = 1) {
+    this.block = new Block([
+      [color, -1, -1],
+      [color, -1, -1],
+      [color, -1, -1],
+      ]);
+  }
+}
+
 export enum Direction {
   CLOCKWISE, COUNTERCLOCKWISE
 }
@@ -63,6 +86,6 @@ export function rotate(shape: Shape, direction: Direction): Shape {
 }
 
 export function randomShape(color: number = 1): Shape {
-  const shapes = [TShape, LShape, UShape];
+  const shapes = [TShape, LShape, UShape, BlockShape];
   return new shapes[Math.floor(Math.random() * shapes.length)](color);
 }

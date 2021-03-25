@@ -67,14 +67,20 @@ const Board = () => {
           }            
         </View>
         <View>
-          <DraxView payload={shape}>
-            <Piece shape={shape} dragStartFn={(x: number, y: number) => {
-              setPartOfPieceDragged({x, y});
-              setMovableBoard(getMovableBoard(gameBoard, shape, y, x));
-            }}/>
-          </DraxView>
-          <Button onPress={() => rotatePiece(Direction.CLOCKWISE)} title='Rotate Clockwise' />
-          <Button onPress={() => rotatePiece(Direction.COUNTERCLOCKWISE)} title='Rotate Counterclockwise' />
+          <PieceView>
+            <RotateButton onPress={() => rotatePiece(Direction.CLOCKWISE)}>
+              <RotateButtonText>↩️</RotateButtonText>
+            </RotateButton>
+            <DraxView payload={shape}>
+              <Piece shape={shape} dragStartFn={(x: number, y: number) => {
+                setPartOfPieceDragged({x, y});
+                setMovableBoard(getMovableBoard(gameBoard, shape, y, x));
+              }}/>
+            </DraxView>
+            <RotateButton onPress={() => rotatePiece(Direction.COUNTERCLOCKWISE)}>
+              <RotateButtonText>↪️</RotateButtonText>
+            </RotateButton>
+          </PieceView>
           <Button onPress={restart} title="Restart"/>
           <Button onPress={skip} title="Skip"/>
         </View>
@@ -87,6 +93,26 @@ const View = styled.View`
   display: flex;
   margin-top: 15px;
   align-items: center;
+`;
+
+const RotateButton = styled.TouchableOpacity`
+  width: 30px;
+  height: 30px;  
+  background-color: rgb(46, 185, 250);
+  border-radius: 15px;
+  align-items: center;
+  margin: 0 5px;
+  justify-content: center;
+`;
+
+const RotateButtonText = styled.Text`
+  color: white;
+  font-size: 16px;
+`;
+
+const PieceView = styled.View`
+  display: flex;
+  flex-direction: row;
 `;
 
 const Row = styled.View`
