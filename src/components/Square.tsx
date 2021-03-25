@@ -4,11 +4,14 @@ import styled from 'styled-components/native';
 const COLOR_MAP = ['white', 'red'];
 
 type Props = {
-  color?: number;
-  movable?: boolean;
+  x?: number,
+  y?: number,
+  color?: number,
+  movable?: boolean,
+  dragStartFn?: Function,
 }
 
-const Square: React.FC<Props> = ({color = 0, movable = false}) => {
+const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn}) => {
 
   const opacity = color === -1 ? 0 : 1;
 
@@ -27,7 +30,7 @@ const Square: React.FC<Props> = ({color = 0, movable = false}) => {
     background: white;
     opacity: 0.6;
     margin-left: 10px;
-  ` 
+  `;
 
   const GradientB = styled.View`
     z-index: 1;
@@ -36,10 +39,14 @@ const Square: React.FC<Props> = ({color = 0, movable = false}) => {
     background: white;
     opacity: 0.3;
     margin-left: 10px;
-  ` 
+  `;
 
    return (
-    <View>
+    <View onTouchStart={() => {
+      if (dragStartFn) {
+        dragStartFn(x, y);
+      }
+    }}>
       <GradientB>
         <GradientA/>
       </GradientB>
