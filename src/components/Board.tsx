@@ -33,6 +33,11 @@ const Board = () => {
     }
   }
 
+  const restart = () => {
+    setGameBoard(createBoard());
+    setShape(randomShape());
+  }
+
   return (
     <GestureHandlerRootView>
       <DraxProvider>
@@ -66,6 +71,7 @@ const Board = () => {
           </DraxView>
           <Button onPress={() => rotatePiece(Direction.CLOCKWISE)} title='Rotate Clockwise' />
           <Button onPress={() => rotatePiece(Direction.COUNTERCLOCKWISE)} title='Rotate Counterclockwise' />
+          <Button onPress={restart} title="Restart"/>
         </View>
       </DraxProvider>
     </GestureHandlerRootView>
