@@ -60,6 +60,17 @@ export class BlockShape implements Shape {
   }
 }
 
+export class CornerShape implements Shape {
+  block: Block;
+
+  constructor(color: number = 1) {
+    this.block = new Block([
+      [color, color],
+      [color, -1]
+    ]);
+  }
+}
+
 export class IShape implements Shape {
   block: Block;
   
@@ -86,6 +97,11 @@ export function rotate(shape: Shape, direction: Direction): Shape {
 }
 
 export function randomShape(color: number = 1): Shape {
-  const shapes = [TShape, LShape, UShape, BlockShape];
+  const shapes = [TShape, LShape, UShape, BlockShape, CornerShape];
   return new shapes[Math.floor(Math.random() * shapes.length)](color);
+}
+
+export function getShapes(color: number = 1): Shape[] {
+  return [TShape, LShape, UShape, BlockShape, CornerShape]
+  .map(shape => new shape(color));
 }

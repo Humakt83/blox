@@ -2,16 +2,18 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { Shape } from '../logic/Block';
 import Square from './Square';
+import {View} from 'react-native';
 
 type Props = {
   shape: Shape,
-  dragStartFn: Function,
+  dragStartFn?: Function,
+  small?: boolean
 }
 
-const Piece : React.FC<Props> = ({shape, dragStartFn}) => {
+const Piece : React.FC<Props> = ({shape, dragStartFn, small = false}) => {
 
   return (
-    <>
+    <View>
       {
         shape.block.formation.map((row: number[], index: number) => {
           return (
@@ -25,6 +27,7 @@ const Piece : React.FC<Props> = ({shape, dragStartFn}) => {
                       dragStartFn={dragStartFn}
                       y={index}
                       x={indexCol}
+                      small={small}
                     />
                   )
                 })
@@ -33,7 +36,7 @@ const Piece : React.FC<Props> = ({shape, dragStartFn}) => {
           )
         })
       }
-    </>
+    </View>
   );
 };
 
