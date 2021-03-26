@@ -21,7 +21,11 @@ const Board = () => {
   const [gameOver, setGameOver] = useState(false);
 
   const rotatePiece = (direction: Direction) => {
-    setActiveShape(rotate(activeShape, direction));
+    const rotatedShape = rotate(activeShape, direction)
+    const filteredPieces = pieces.filter((val: Shape) => val !== activeShape);
+    filteredPieces.push(rotatedShape);
+    setPieces(filteredPieces);
+    setActiveShape(rotatedShape);
   };
 
   const putPiece = (payload: Shape, row: number, column: number) => {
@@ -30,11 +34,12 @@ const Board = () => {
       let newBoard = placePiece(gameBoard, payload, row, column, y, x);
       newBoard = makeAIMove(newBoard);
       setGameBoard(newBoard);
-      setPieces(pieces.filter((val: Shape) => val !== payload));
-      if (pieces.length < 2) {
+      const filteredPieces = pieces.filter((val: Shape) => val !== payload);
+      setPieces(filteredPieces);
+      if (filteredPieces.length < 1) {
         setGameOver(true);
       } else {
-        setActiveShape(pieces[1]);
+        setActiveShape(filteredPieces[0]);
       }
       setMovableBoard(getEmptyMovableBoard());
     }

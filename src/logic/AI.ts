@@ -15,13 +15,13 @@ function getPossibleMoves(board: number[][], shape: Shape) : {y: number, x: numb
 }
 
 export function makeAIMove(board: number[][], aiColor: number = 2) : number[][] {
-  let shape = randomShape(aiColor);
+  const shape = randomShape(aiColor);
   let moves : {y: number, x: number}[] = [];
   let timesRotated = 0;
   while (moves.length < 1 && timesRotated < 3) {
     moves = getPossibleMoves(board, shape);
     if (moves.length < 1) {
-      shape = rotate(shape, Direction.CLOCKWISE);
+      shape.block = rotate(shape, Direction.CLOCKWISE);
       timesRotated++;
     }
   }
