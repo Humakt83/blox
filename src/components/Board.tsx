@@ -36,6 +36,7 @@ const Board = () => {
   const restart = () => {
     setGameBoard(createBoard());
     setShape(randomShape());
+    setMovableBoard(getEmptyMovableBoard());
   };
 
   const skip = () => {
