@@ -14,20 +14,30 @@ function getPossibleMoves(board: number[][], shape: Shape) : {y: number, x: numb
   return moves;
 }
 
-export function makeAIMove(board: number[][], aiColor: number = 2) : number[][] {
-  const shape = randomShape(aiColor);
+export function makeAIMove(board: number[][], shapes: Shape[], aiColor: number = 2) : {board: number[][], usedShape: Shape | null} {
+  if (shapes.length < 1) {
+    return {board, usedShape: null};
+  }
+  let shape = randomShape(shapes);
   let moves : {y: number, x: number}[] = [];
   let timesRotated = 0;
-  while (moves.length < 1 && timesRotated < 3) {
-    moves = getPossibleMoves(board, shape);
+  let timesShapePicked = 0;
+  while (moves.length < 1 && timesShapePicked < shapes.length) {
+    while (moves.length < 1 && timesRotated < 3) {
+      moves = getPossibleMoves(board, shape);
+      if (moves.length < 1) {
+        shape = rotate(shape, Direction.CLOCKWISE);
+        timesRotated++;
+      }
+    }
     if (moves.length < 1) {
-      shape.block = rotate(shape, Direction.CLOCKWISE);
-      timesRotated++;
+      shape = shapes[timesShapePicked];
+      timesShapePicked ++;
     }
   }
   if (moves.length > 0) {
     const randomMove = moves[Math.floor(Math.random() * moves.length)];
-    return placePiece(board, shape, randomMove.y, randomMove.x);
+    return {board: placePiece(board, shape, randomMove.y, randomMove.x), usedShape: shape};
   }
-  return board;
+  return {board, usedShape: null};
 }

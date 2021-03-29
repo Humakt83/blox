@@ -10,10 +10,12 @@ export class Block {
 }
 
 export interface Shape {
+  name: string;
   block: Block;
 }
 
 export class TShape implements Shape {
+  name = 'TShape'
   block: Block;
 
   constructor(color: number = 1) {
@@ -26,6 +28,7 @@ export class TShape implements Shape {
 }
 
 export class LShape implements Shape {
+  name = 'LShape'
   block: Block;
 
   constructor(color: number = 1) {
@@ -38,6 +41,7 @@ export class LShape implements Shape {
 }
 
 export class UShape implements Shape {
+  name = 'UShape'
   block: Block;
 
   constructor(color: number = 1) {
@@ -50,6 +54,7 @@ export class UShape implements Shape {
 }
 
 export class BlockShape implements Shape {
+  name = 'BlockShape'
   block: Block;
   
   constructor(color: number = 1) {
@@ -61,6 +66,7 @@ export class BlockShape implements Shape {
 }
 
 export class CornerShape implements Shape {
+  name = 'CornerShape'
   block: Block;
 
   constructor(color: number = 1) {
@@ -72,6 +78,7 @@ export class CornerShape implements Shape {
 }
 
 export class IShape implements Shape {
+  name = 'IShape'
   block: Block;
   
   constructor(color: number = 1) {
@@ -96,9 +103,8 @@ export function rotate(shape: Shape, direction: Direction): Shape {
   return Object.assign({}, shape, {block: new Block(formation)});
 }
 
-export function randomShape(color: number = 1): Shape {
-  const shapes = [TShape, LShape, UShape, BlockShape, CornerShape];
-  return new shapes[Math.floor(Math.random() * shapes.length)](color);
+export function randomShape(pieces: Shape[]): Shape {
+  return pieces[Math.floor(Math.random() * pieces.length)];
 }
 
 export function getShapes(color: number = 1): Shape[] {

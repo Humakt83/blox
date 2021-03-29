@@ -1,16 +1,17 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { Shape } from '../logic/Block';
-import Square from './Square';
+import Square, {SquareSizes} from './Square';
 import {View} from 'react-native';
 
 type Props = {
   shape: Shape,
   dragStartFn?: Function,
-  small?: boolean
+  aiPiece?: boolean
+  large?: boolean
 }
 
-const Piece : React.FC<Props> = ({shape, dragStartFn, small = false}) => {
+const Piece : React.FC<Props> = ({shape, dragStartFn, aiPiece = false, large = false}) => {
 
   return (
     <View>
@@ -27,7 +28,7 @@ const Piece : React.FC<Props> = ({shape, dragStartFn, small = false}) => {
                       dragStartFn={dragStartFn}
                       y={index}
                       x={indexCol}
-                      small={small}
+                      squareSize={large ? SquareSizes.M : aiPiece ? SquareSizes.XS : SquareSizes.S}
                     />
                   )
                 })

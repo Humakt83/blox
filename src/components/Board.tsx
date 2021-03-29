@@ -1,20 +1,19 @@
 import React, {useState} from 'react';
 import Square from './Square';
 import Piece from './Piece';
+import Pieces from './Pieces';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {rotate, Direction, Shape, getShapes} from '../logic/Block';
 import { DraxProvider, DraxView } from 'react-native-drax';
-
-import {Button, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {createBoard, placePiece, getMovableBoard, getEmptyMovableBoard} from '../logic/Blox';
 import {makeAIMove} from '../logic/AI';
 
 const Board = () => {
 
-  const [pieces, setPieces] = useState(getShapes());
+  const [shapes, setShapes] = useState(getShapes());
   const [aiPieces, setAIPieces] = useState(getShapes(2));
-  const [activeShape, setActiveShape] = useState(pieces[0]);
+  const [activeShape, setActiveShape] = useState(shapes[0]);
   const [gameBoard, setGameBoard] = useState(createBoard());
   const [movableBoard, setMovableBoard] = useState(getEmptyMovableBoard());
   const [partOfPieceDragged, setPartOfPieceDragged] = useState({x: 0, y: 0});
@@ -22,20 +21,26 @@ const Board = () => {
 
   const rotatePiece = (direction: Direction) => {
     const rotatedShape = rotate(activeShape, direction)
-    const filteredPieces = pieces.filter((val: Shape) => val !== activeShape);
+    const filteredPieces = shapes.filter((val: Shape) => val !== activeShape);
     filteredPieces.push(rotatedShape);
-    setPieces(filteredPieces);
+    setShapes(filteredPieces);
     setActiveShape(rotatedShape);
   };
+
+  const moveAI = (board: number[][]): number[][] => {
+    const aiMove = makeAIMove(board, aiPieces);
+    setAIPieces(aiPieces.filter(piece => piece.name !== aiMove.usedShape?.name));
+    return aiMove.board;
+  }
 
   const putPiece = (payload: Shape, row: number, column: number) => {
     if (movableBoard[row][column]) {
       const {x, y} = partOfPieceDragged;
       let newBoard = placePiece(gameBoard, payload, row, column, y, x);
-      newBoard = makeAIMove(newBoard);
+      newBoard = moveAI(newBoard);
       setGameBoard(newBoard);
-      const filteredPieces = pieces.filter((val: Shape) => val !== payload);
-      setPieces(filteredPieces);
+      const filteredPieces = shapes.filter((val: Shape) => val !== payload);
+      setShapes(filteredPieces);
       if (filteredPieces.length < 1) {
         setGameOver(true);
       } else {
@@ -48,14 +53,14 @@ const Board = () => {
   const restart = () => {
     setGameBoard(createBoard());
     const pieces = getShapes();
-    setPieces(pieces);
+    setShapes(pieces);
     setAIPieces(getShapes(2));
     setActiveShape(pieces[0]);
     setMovableBoard(getEmptyMovableBoard());
   };
 
   const skip = () => {
-    setGameBoard(makeAIMove(gameBoard));
+    setGameBoard(moveAI(gameBoard));
   };
 
   return (
@@ -83,39 +88,34 @@ const Board = () => {
           }            
         </View>
         <View>
-          <PieceView>
-            <RotateButton onPress={() => rotatePiece(Direction.CLOCKWISE)}>
-              <RotateButtonText>↩️</RotateButtonText>
-            </RotateButton>
-            <DraxView payload={activeShape}>
-              <Piece shape={activeShape} dragStartFn={(x: number, y: number) => {
-                setPartOfPieceDragged({x, y});
-                setMovableBoard(getMovableBoard(gameBoard, activeShape, y, x));
-              }}/>
-            </DraxView>
-            <RotateButton onPress={() => rotatePiece(Direction.COUNTERCLOCKWISE)}>
-              <RotateButtonText>↪️</RotateButtonText>
-            </RotateButton>
-          </PieceView>
-          <Pieces>
-            {
-              pieces
-                .filter((piece: Shape) => piece !== activeShape)
-                .map((piece: Shape, index: number) => {
-                  return (
-                    <TouchableOpacity 
-                        onPress={() => setActiveShape(piece)}
-                        key={`piece-${index}`}>
-                      <Piece 
-                        shape={piece}                                              
-                        small={true}/>
-                    </TouchableOpacity>
-                  )
-                })
-            }
-          </Pieces>
-          <Button onPress={restart} title="Restart"/>
-          <Button onPress={skip} title="Skip"/>
+          <Row>
+            <PieceView>
+              <RotateButton onPress={() => rotatePiece(Direction.CLOCKWISE)}>
+                <RotateButtonText>↩️</RotateButtonText>
+              </RotateButton>
+              <DraxView payload={activeShape}>
+                <Piece large={true} shape={activeShape} dragStartFn={(x: number, y: number) => {
+                  setPartOfPieceDragged({x, y});
+                  setMovableBoard(getMovableBoard(gameBoard, activeShape, y, x));
+                }}/>
+              </DraxView>
+              <RotateButton onPress={() => rotatePiece(Direction.COUNTERCLOCKWISE)}>
+                <RotateButtonText>↪️</RotateButtonText>
+              </RotateButton>
+            </PieceView>
+            <CommandMenu>
+              <Button onPress={restart}>
+                  <ButtonText>RESTART</ButtonText>
+                </Button>
+                <Button onPress={skip}>
+                  <ButtonText>
+                    SKIP
+                  </ButtonText>
+                </Button>
+            </CommandMenu>
+          </Row>
+          <Pieces clickFn={setActiveShape} shapes={shapes.filter((piece: Shape) => piece !== activeShape)} />
+          <Pieces shapes={aiPieces} aiPieces={true}/>
           {
             gameOver ? <GameOver>Game Over!</GameOver> : <></>
           }
@@ -151,14 +151,6 @@ const PieceView = styled.View`
   flex-direction: row;
 `;
 
-const Pieces = styled.View`
-  margin-top: 5px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
-`
-
 const Row = styled.View`
   display: flex;
   flex-direction: row;
@@ -167,6 +159,28 @@ const Row = styled.View`
 const GameOver = styled.Text`
   font-size: 28px;
   font-weight: bold;
+`;
+
+const Button = styled.TouchableOpacity`
+  width: 80px;
+  height: 30px;
+  background-color: rgb(46, 185, 250);
+  border-radius: 15px;
+  align-items: center;
+  justify-content: center;
+`
+
+const ButtonText = styled.Text`
+  font-size: 13px;
+  color: white;
+  font-weight: bold;
+`
+
+const CommandMenu = styled.View`
+  padding-left: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 `;
 
 export default Board;
