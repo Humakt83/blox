@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-const COLOR_MAP = ['white', 'red', 'black'];
+const COLOR_MAP = ['white', 'red', 'black', 'blue'];
 
 export enum SquareSizes {
   XS, S, M

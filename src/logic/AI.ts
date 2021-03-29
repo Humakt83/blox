@@ -14,7 +14,7 @@ function getPossibleMoves(board: number[][], shape: Shape) : {y: number, x: numb
   return moves;
 }
 
-export function makeAIMove(board: number[][], shapes: Shape[], aiColor: number = 2) : {board: number[][], usedShape: Shape | null} {
+export function makeAIMove(board: number[][], shapes: Shape[]) : {board: number[][], usedShape: Shape | null} {
   if (shapes.length < 1) {
     return {board, usedShape: null};
   }
