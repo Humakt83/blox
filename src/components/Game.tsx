@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-import Square from './Square';
-import Piece from './Piece';
+import Actions from './Actions';
 import Pieces from './Pieces';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {rotate, Direction, Shape, getShapes} from '../logic/Block';
-import { DraxProvider, DraxView } from 'react-native-drax';
+import { DraxProvider } from 'react-native-drax';
 import styled from 'styled-components/native';
 import {createBoard, placePiece, getMovableBoard, getEmptyMovableBoard} from '../logic/Blox';
 import {makeAIMove} from '../logic/AI';
@@ -74,32 +73,10 @@ const Game = () => {
       <DraxProvider>
         <Board gameBoard={gameBoard} movableBoard={movableBoard} putPiece={putPiece}/>
         <View>
-          <Row>
-            <PieceView>
-              <RotateButton onPress={() => rotatePiece(Direction.CLOCKWISE)}>
-                <RotateButtonText>↩️</RotateButtonText>
-              </RotateButton>
-              <DraxView payload={activeShape}>
-                <Piece large={true} shape={activeShape} dragStartFn={(x: number, y: number) => {
+          <Actions rotatePiece={rotatePiece} activeShape={activeShape} dragStartFn={(x: number, y: number) => {
                   setPartOfPieceDragged({x, y});
                   setMovableBoard(getMovableBoard(gameBoard, activeShape, y, x));
-                }}/>
-              </DraxView>
-              <RotateButton onPress={() => rotatePiece(Direction.COUNTERCLOCKWISE)}>
-                <RotateButtonText>↪️</RotateButtonText>
-              </RotateButton>
-            </PieceView>
-            <CommandMenu>
-              <Button onPress={restart}>
-                  <ButtonText>RESTART</ButtonText>
-                </Button>
-                <Button onPress={skip}>
-                  <ButtonText>
-                    SKIP
-                  </ButtonText>
-                </Button>
-            </CommandMenu>
-          </Row>
+                }} restart={restart} skip={skip}/>
           <Pieces clickFn={setActiveShape} shapes={shapes.filter((piece: Shape) => piece !== activeShape)} />
           <Pieces shapes={aiPieces} aiPieces={true}/>
           <Pieces shapes={ai2Pieces} aiPieces={true}/>
@@ -118,56 +95,9 @@ const View = styled.View`
   align-items: center;
 `;
 
-const RotateButton = styled.TouchableOpacity`
-  width: 30px;
-  height: 30px;  
-  background-color: rgb(46, 185, 250);
-  border-radius: 15px;
-  align-items: center;
-  margin: 0 5px;
-  justify-content: center;
-`;
-
-const RotateButtonText = styled.Text`
-  color: white;
-  font-size: 16px;
-`;
-
-const PieceView = styled.View`
-  display: flex;
-  flex-direction: row;
-`;
-
-const Row = styled.View`
-  display: flex;
-  flex-direction: row;
-`;
-
 const GameOver = styled.Text`
   font-size: 28px;
   font-weight: bold;
-`;
-
-const Button = styled.TouchableOpacity`
-  width: 80px;
-  height: 30px;
-  background-color: rgb(46, 185, 250);
-  border-radius: 15px;
-  align-items: center;
-  justify-content: center;
-`
-
-const ButtonText = styled.Text`
-  font-size: 13px;
-  color: white;
-  font-weight: bold;
-`
-
-const CommandMenu = styled.View`
-  padding-left: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
 `;
 
 export default Game;
