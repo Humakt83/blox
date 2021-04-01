@@ -59,6 +59,7 @@ const Board = () => {
     setAIPieces(getShapes(2));
     setAI2Pieces(getShapes(3));
     setActiveShape(pieces[0]);
+    setGameOver(false);
     setMovableBoard(getEmptyMovableBoard());
   };
 
