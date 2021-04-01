@@ -77,18 +77,66 @@ export class CornerShape implements Shape {
   }
 }
 
-export class IShape implements Shape {
-  name = 'IShape'
+export class DiagonalShape implements Shape {
+  name = 'DiagonalShape'
+  block: Block;
+
+  constructor(color: number = 1) {
+    this.block = new Block([
+      [color, -1],
+      [-1, color]
+    ]);
+  }
+}
+
+export class HShape implements Shape {
+  name = 'HShape'
   block: Block;
   
   constructor(color: number = 1) {
     this.block = new Block([
-      [color, -1, -1],
-      [color, -1, -1],
-      [color, -1, -1],
+      [color, -1, color],
+      [color, color, color],
+      [color, -1, color]
       ]);
   }
 }
+
+export class XShape implements Shape {
+  name = 'XShape'
+  block: Block;
+  
+  constructor(color: number = 1) {
+    this.block = new Block([
+      [color, -1, color],
+      [-1, color, -1],
+      [color, -1, color]
+      ]);
+  }
+}
+
+export class YShape implements Shape {
+  name = 'YShape'
+  block: Block;
+  
+  constructor(color: number = 1) {
+    this.block = new Block([
+      [color, -1, color],
+      [-1, color, -1],
+      [color, -1, -1]
+      ]);
+  }
+}
+
+export class DotShape implements Shape {
+  name = 'DotShape'
+  block: Block;
+  
+  constructor(color: number = 1) {
+    this.block = new Block([[color]]);
+  }
+}
+
 
 export enum Direction {
   CLOCKWISE, COUNTERCLOCKWISE
@@ -108,6 +156,6 @@ export function randomShape(pieces: Shape[]): Shape {
 }
 
 export function getShapes(color: number = 1): Shape[] {
-  return [TShape, LShape, UShape, BlockShape, CornerShape]
+  return [TShape, LShape, UShape, BlockShape, CornerShape, HShape, DotShape, DiagonalShape, XShape, YShape]
   .map(shape => new shape(color));
 }
