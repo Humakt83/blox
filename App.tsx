@@ -14,14 +14,14 @@
    ScrollView,
  } from 'react-native';
 
- import Board from './src/components/Board';
+ import Game from './src/components/Game';
 
  const App = () => {
   
    return (
      <SafeAreaView>
        <ScrollView contentInsetAdjustmentBehavior="automatic">
-         <Board />
+         <Game />
        </ScrollView>
      </SafeAreaView>
    );
