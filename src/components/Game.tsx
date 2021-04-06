@@ -33,6 +33,11 @@ const Game = () => {
       return board;
     }
     const aiMove = makeAIMove(board, ai.pieces);
+    if (!aiMove.usedShape) {
+      ai.skipping = true;
+      setAI(ai);
+      return board;
+    }
     ai.pieces = ai.pieces.filter(piece => piece.name !== aiMove.usedShape?.name);
     setAI(ai);
     return aiMove.board;
@@ -68,8 +73,12 @@ const Game = () => {
   };
 
   const skip = () => {
-    let board = moveAI(gameBoard, aiOne, setAIOne);
-    setGameBoard(moveAI(board, aiTwo, setAITwo));
+    if (aiOne.skipping && aiTwo.skipping) {
+      setGameOver(true);
+    } else {
+      let board = moveAI(gameBoard, aiOne, setAIOne);
+      setGameBoard(moveAI(board, aiTwo, setAITwo));
+    }
   };
 
   return (

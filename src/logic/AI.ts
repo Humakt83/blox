@@ -20,9 +20,9 @@ export function makeAIMove(board: number[][], shapes: Shape[]) : {board: number[
   }
   let shape = randomShape(shapes);
   let moves : {y: number, x: number}[] = [];
-  let timesRotated = 0;
   let timesShapePicked = 0;
-  while (moves.length < 1 && timesShapePicked < shapes.length) {
+  while (moves.length < 1 && timesShapePicked <= shapes.length) {
+    let timesRotated = 0;
     while (moves.length < 1 && timesRotated < 3) {
       moves = getPossibleMoves(board, shape);
       if (moves.length < 1) {
