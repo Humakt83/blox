@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { StyleSheet, } from 'react-native';
+import { COLORS } from '../Constants';
 
 import Animated, {
   withTiming,
@@ -10,7 +11,7 @@ import Animated, {
   Easing
 } from 'react-native-reanimated';
 
-const COLOR_MAP = ['white', 'red', 'black', 'blue'];
+const COLOR_MAP = [COLORS.white, COLORS.red, COLORS.black, COLORS.blue];
 
 export enum SquareSizes {
   XS, S, M
@@ -74,12 +75,12 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
   `;
   
   const View = styled.View`
-    border: 1px solid black;
+    border: 1px solid ${COLORS.black};
     position: absolute;
     z-index: 1;
     width: ${size}px;
     height: ${size}px;
-    background: ${movable? 'yellow' : COLOR_MAP[Math.max(0, color)]};
+    background: ${movable? COLORS.yellow : COLOR_MAP[Math.max(0, color)]};
     padding-left: ${size / 3}px;
     opacity: ${opacity};
   `;
@@ -88,7 +89,7 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
     z-index: 3;
     width: ${size / 3}px;
     height: ${size}px;
-    background: white;
+    background: ${COLORS.white};
     opacity: 0.6;
     position: absolute;
   `;
@@ -97,7 +98,7 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
     z-index: 2;
     width: ${size * 2 / 3}px;
     height: ${size}px;
-    background: white;
+    background: ${COLORS.white};
     opacity: 0.3;
     position: absolute;
   `;
@@ -109,7 +110,7 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
       width: size / 2,
       height: size / 2,
       borderRadius: 45,
-      backgroundColor: 'white',
+      backgroundColor: COLORS.white,
       marginLeft: 5,
       marginTop: 3,
       position: 'absolute'
