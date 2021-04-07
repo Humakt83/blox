@@ -8,6 +8,7 @@ import styled from 'styled-components/native';
 import {createBoard, placePiece, getMovableBoard, getEmptyMovableBoard} from '../logic/Blox';
 import {makeAIMove, AI, createAIPlayer} from '../logic/AI';
 import Board from './Board';
+import GameOver from './GameOver';
 
 const Game = () => {
 
@@ -84,6 +85,9 @@ const Game = () => {
   return (
     <GestureHandlerRootView>
       <DraxProvider>
+        {
+          gameOver ? <GameOver board={gameBoard} restart={restart}/> : <></>
+        }
         <Board gameBoard={gameBoard} movableBoard={movableBoard} putPiece={putPiece}/>
         <View>
           <Actions rotatePiece={rotatePiece} activeShape={activeShape} dragStartFn={(x: number, y: number) => {
@@ -93,9 +97,6 @@ const Game = () => {
           <Pieces clickFn={setActiveShape} shapes={shapes.filter((piece: Shape) => piece !== activeShape)} />
           <Pieces shapes={aiOne.pieces} aiPieces={true}/>
           <Pieces shapes={aiTwo.pieces} aiPieces={true}/>
-          {
-            gameOver ? <GameOver>Game Over!</GameOver> : <></>
-          }
         </View>
       </DraxProvider>
     </GestureHandlerRootView>
@@ -106,11 +107,6 @@ const View = styled.View`
   display: flex;
   margin-top: 15px;
   align-items: center;
-`;
-
-const GameOver = styled.Text`
-  font-size: 28px;
-  font-weight: bold;
 `;
 
 export default Game;

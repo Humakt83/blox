@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { StyleSheet, } from 'react-native';
-import { COLORS } from '../Constants';
+import { COLORS, PLAYER_COLOR_MAP } from '../Constants';
 
 import Animated, {
   withTiming,
@@ -11,11 +11,11 @@ import Animated, {
   Easing
 } from 'react-native-reanimated';
 
-const COLOR_MAP = [COLORS.white, COLORS.red, COLORS.black, COLORS.blue];
-
 export enum SquareSizes {
   XS, S, M
 }
+
+export const COLOR_MAP = [COLORS.white].concat(PLAYER_COLOR_MAP) ;
 
 const convertSize = (size: SquareSizes) : number => {
   switch(size) {

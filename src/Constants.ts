@@ -9,3 +9,6 @@ export const COLORS = {
   black: '#112233',
   lightgray: '#AAAAAA'
 }
+
+export const PLAYER_COLOR_MAP = [COLORS.red, COLORS.black, COLORS.blue];
+

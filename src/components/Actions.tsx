@@ -3,6 +3,7 @@ import { Direction, Shape } from '../logic/Block';
 import { DraxView } from 'react-native-drax';
 import styled from 'styled-components/native';
 import Piece from './Piece';
+import ActionButton from './ActionButton';
 
 type Props = {
   rotatePiece: Function,
@@ -28,14 +29,8 @@ const Actions: React.FC<Props> = ({rotatePiece, activeShape, restart, skip, drag
         </RotateButton>
       </PieceView>
       <CommandMenu>
-        <Button onPress={() => restart()}>
-            <ButtonText>RESTART</ButtonText>
-          </Button>
-          <Button onPress={() => skip()}>
-            <ButtonText>
-              SKIP
-            </ButtonText>
-          </Button>
+        <ActionButton clickFn={skip} text="SKIP" />
+        <ActionButton clickFn={restart} text="RESTART" />
       </CommandMenu>
     </View>
   );
@@ -65,21 +60,6 @@ const PieceView = styled.View`
   display: flex;
   flex-direction: row;
 `;
-
-const Button = styled.TouchableOpacity`
-  width: 80px;
-  height: 30px;
-  background-color: rgb(46, 185, 250);
-  border-radius: 15px;
-  align-items: center;
-  justify-content: center;
-`
-
-const ButtonText = styled.Text`
-  font-size: 13px;
-  color: white;
-  font-weight: bold;
-`
 
 const CommandMenu = styled.View`
   padding-left: 15px;
