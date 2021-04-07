@@ -1,5 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import { StyleSheet, } from 'react-native';
+
+import Animated, {
+  withTiming,
+  withRepeat,
+  useAnimatedStyle,
+  withSequence,
+  Easing
+} from 'react-native-reanimated';
 
 const COLOR_MAP = ['white', 'red', 'black', 'blue'];
 
@@ -32,43 +41,98 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
   const opacity = color === -1 ? 0 : 1;
   const size = convertSize(squareSize) ;
 
+  const glimmer = useAnimatedStyle(() => {
+    return {
+      opacity: withRepeat(withSequence(withTiming(1, {
+        duration: 2000,
+        easing: Easing.inOut(Easing.cubic)}),
+        withTiming(0, {
+          duration: 2000,
+          easing: Easing.inOut(Easing.cubic)
+        })), -1, true),
+      marginLeft: withRepeat(withSequence(withTiming(5, {
+        duration: 1000,
+        easing: Easing.inOut(Easing.cubic)}),
+        withTiming(20, {
+          duration: 1000,
+          easing: Easing.inOut(Easing.cubic)
+        })), -1, true),
+      marginTop: withRepeat(withSequence(withTiming(3, {
+        duration: 1000,
+        easing: Easing.inOut(Easing.cubic)}),
+        withTiming(10, {
+          duration: 1000,
+          easing: Easing.inOut(Easing.cubic)
+        })), -1, true)
+    };
+  });
+
+  const Container = styled.View`
+    opacity: ${opacity};
+    width: ${size}px;
+    height: ${size}px;
+  `;
+  
   const View = styled.View`
+    border: 1px solid black;
+    position: absolute;
+    z-index: 1;
     width: ${size}px;
     height: ${size}px;
     background: ${movable? 'yellow' : COLOR_MAP[Math.max(0, color)]};
-    border: 1px solid black;
-    opacity: ${opacity}
+    padding-left: ${size / 3}px;
+    opacity: ${opacity};
   `;
 
   const GradientA = styled.View`
-    z-index: 2;
+    z-index: 3;
     width: ${size / 3}px;
     height: ${size}px;
     background: white;
     opacity: 0.6;
-    margin-left: ${size / 3}px;
+    position: absolute;
   `;
 
   const GradientB = styled.View`
-    z-index: 1;
+    z-index: 2;
     width: ${size * 2 / 3}px;
     height: ${size}px;
     background: white;
     opacity: 0.3;
-    margin-left: ${size / 3}px;
+    position: absolute;
   `;
 
-   return (
-    <View onTouchStart={() => {
-      if (dragStartFn) {
-        dragStartFn(x, y);
-      }
-    }}>
-      <GradientB>
-        <GradientA/>
-      </GradientB>
-    </View>
-   );
+  const styles = StyleSheet.create({
+    glimmer: {
+      opacity: 0,
+      zIndex: 4,
+      width: size / 2,
+      height: size / 2,
+      borderRadius: 45,
+      backgroundColor: 'white',
+      marginLeft: 5,
+      marginTop: 3,
+      position: 'absolute'
+    }
+  });
+
+  const animation = !movable && color > 0 && squareSize === SquareSizes.M? <Animated.View style={[styles.glimmer, glimmer]} /> : <></>;
+
+  return (
+    <Container>
+      <View onTouchStart={() => {
+        if (dragStartFn) {
+          dragStartFn(x, y);
+        }
+      }}>
+        <GradientB>
+          <GradientA>
+            { animation }
+          </GradientA>
+        </GradientB>
+      </View>
+    </Container>
+  );
 };
 
 export default Square;
