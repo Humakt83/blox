@@ -2,13 +2,14 @@ import React, {useState} from 'react';
 import Actions from './Actions';
 import Pieces from './Pieces';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import {rotate, Direction, Shape, getShapes} from '../logic/Block';
+import {rotate, Direction, Shape, getShapes} from '../../logic/Block';
 import { DraxProvider } from 'react-native-drax';
 import styled from 'styled-components/native';
-import {createBoard, placePiece, getMovableBoard, getEmptyMovableBoard} from '../logic/Blox';
-import {makeAIMove, AI, createAIPlayer} from '../logic/AI';
+import {createBoard, placePiece, getMovableBoard, getEmptyMovableBoard} from '../../logic/Blox';
+import {makeAIMove, AI, createAIPlayer} from '../../logic/AI';
 import Board from './Board';
 import GameOver from './GameOver';
+import MainContainer from '../common/MainContainer';
 
 const Game = () => {
 
@@ -83,23 +84,25 @@ const Game = () => {
   };
 
   return (
-    <GestureHandlerRootView>
-      <DraxProvider>
-        {
-          gameOver ? <GameOver board={gameBoard} restart={restart}/> : <></>
-        }
-        <Board gameBoard={gameBoard} movableBoard={movableBoard} putPiece={putPiece}/>
-        <View>
-          <Actions rotatePiece={rotatePiece} activeShape={activeShape} dragStartFn={(x: number, y: number) => {
-                  setPartOfPieceDragged({x, y});
-                  setMovableBoard(getMovableBoard(gameBoard, activeShape, y, x));
-                }} restart={restart} skip={skip}/>
-          <Pieces clickFn={setActiveShape} shapes={shapes.filter((piece: Shape) => piece !== activeShape)} />
-          <Pieces shapes={aiOne.pieces} aiPieces={true}/>
-          <Pieces shapes={aiTwo.pieces} aiPieces={true}/>
-        </View>
-      </DraxProvider>
-    </GestureHandlerRootView>
+    <MainContainer>
+      <GestureHandlerRootView>
+        <DraxProvider>
+          {
+            gameOver ? <GameOver board={gameBoard} restart={restart}/> : <></>
+          }
+          <Board gameBoard={gameBoard} movableBoard={movableBoard} putPiece={putPiece}/>
+          <View>
+            <Actions rotatePiece={rotatePiece} activeShape={activeShape} dragStartFn={(x: number, y: number) => {
+                    setPartOfPieceDragged({x, y});
+                    setMovableBoard(getMovableBoard(gameBoard, activeShape, y, x));
+                  }} restart={restart} skip={skip}/>
+            <Pieces clickFn={setActiveShape} shapes={shapes.filter((piece: Shape) => piece !== activeShape)} />
+            <Pieces shapes={aiOne.pieces} aiPieces={true}/>
+            <Pieces shapes={aiTwo.pieces} aiPieces={true}/>
+          </View>
+        </DraxProvider>
+      </GestureHandlerRootView>
+    </MainContainer>
   );
 };
 

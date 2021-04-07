@@ -1,9 +1,9 @@
 import React from 'react';
-import { Direction, Shape } from '../logic/Block';
+import { Direction, Shape } from '../../logic/Block';
 import { DraxView } from 'react-native-drax';
 import styled from 'styled-components/native';
 import Piece from './Piece';
-import ActionButton from './ActionButton';
+import ActionButton from '../common/ActionButton';
 
 type Props = {
   rotatePiece: Function,

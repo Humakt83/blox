@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { StyleSheet, } from 'react-native';
-import { COLORS, PLAYER_COLOR_MAP } from '../Constants';
+import { COLORS, PLAYER_COLOR_MAP } from '../../Constants';
 
 import Animated, {
   withTiming,

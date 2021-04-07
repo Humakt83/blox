@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Shape } from '../logic/Block';
+import { Shape } from '../../logic/Block';
 import Square, {SquareSizes} from './Square';
 import {View} from 'react-native';
 

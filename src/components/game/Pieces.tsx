@@ -1,10 +1,10 @@
 import React from 'react';
 import Piece from './Piece';
-import {Shape} from '../logic/Block';
+import {Shape} from '../../logic/Block';
 
 import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
-import {COLORS} from '../Constants';
+import {COLORS} from '../../Constants';
 
 type Props = {
   clickFn?: Function,

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {COLORS, PLAYER_COLOR_MAP} from '../Constants';
+import {COLORS, PLAYER_COLOR_MAP} from '../../Constants';
 import {flatten} from 'lodash';
-import ActionButton from './ActionButton';
+import ActionButton from '../common/ActionButton';
 
 type Props = {
   board: number[][],
