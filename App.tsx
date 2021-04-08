@@ -4,6 +4,7 @@ import {createStackNavigator, StackNavigationOptions} from '@react-navigation/st
 
 import Game from './src/components/game/Game';
 import Start from './src/components/start/Start';
+import Help from './src/components/help/Help';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ const App = () => {
       <Stack.Navigator>
         <Stack.Screen name="Start" component={Start} options={options} />
         <Stack.Screen name="Game" component={Game} options={options} />
+        <Stack.Screen name="Help" component={Help} />
       </Stack.Navigator>
     </NavigationContainer>
   );

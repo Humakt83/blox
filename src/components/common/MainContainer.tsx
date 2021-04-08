@@ -1,8 +1,8 @@
  import React, {PropsWithChildren, ReactNode} from 'react';
  import {
    SafeAreaView,
-   ScrollView,
  } from 'react-native';
+ import styled from 'styled-components/native';
  import LinearGradient from 'react-native-linear-gradient';
  
  import {COLORS} from '../../Constants';
@@ -12,14 +12,21 @@
    return (
      <SafeAreaView>
       <LinearGradient start={{x:1, y: 1}} end={{x:0, y:0}} colors={[COLORS.white, COLORS.white, COLORS.lightgray, COLORS.black]}>
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <View>
           {props.children}
-        </ScrollView>
+        </View>
       </LinearGradient>
      </SafeAreaView>
       
    );
 };
+
+const View = styled.View`
+  display: flex;
+  min-height: 100%;
+  min-width: 100%;
+  align-items: center;
+`;
  
 export default MainContainer;
 

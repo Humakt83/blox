@@ -11,11 +11,17 @@ const Start = ({navigation}: any) => {
     navigation.navigate('Game');
   };
 
+  const help = () => {
+    navigation.navigate('Help');
+  }
+
   return (
     <MainContainer>
       <View>
         <Title />
-        <ActionButton text="START" clickFn={() => startGame()}/>
+        <ActionButton text="START" clickFn={startGame}/>
+        <ButtonSeparator />
+        <ActionButton text="HELP" clickFn={help} />
       </View>
     </MainContainer>
   );
@@ -26,5 +32,9 @@ const View = styled.View`
   margin-top: 15px;
   align-items: center;
 `;
+
+const ButtonSeparator = styled.View`
+  margin-bottom: 10px;
+`
 
 export default Start;
