@@ -10,13 +10,19 @@ type Props = {
   activeShape: Shape,
   restart: Function,
   skip: Function,
-  dragStartFn: Function
+  dragStartFn: Function,
+  help: Function,
+  toMain: Function
 }
 
-const Actions: React.FC<Props> = ({rotatePiece, activeShape, restart, skip, dragStartFn}) => {
+const Actions: React.FC<Props> = ({rotatePiece, activeShape, restart, skip, dragStartFn, help, toMain}) => {
 
   return (
     <View>
+      <CommandMenu>
+        <ActionButton clickFn={skip} text="SKIP" />
+        <ActionButton clickFn={restart} text="RESTART" />
+      </CommandMenu>
       <PieceView>
         <RotateButton onPress={() => rotatePiece(Direction.CLOCKWISE)}>
           <RotateButtonText>↩️</RotateButtonText>
@@ -29,8 +35,8 @@ const Actions: React.FC<Props> = ({rotatePiece, activeShape, restart, skip, drag
         </RotateButton>
       </PieceView>
       <CommandMenu>
-        <ActionButton clickFn={skip} text="SKIP" />
-        <ActionButton clickFn={restart} text="RESTART" />
+        <ActionButton clickFn={toMain} text="MAIN" />
+        <ActionButton clickFn={help} text="HELP" />
       </CommandMenu>
     </View>
   );

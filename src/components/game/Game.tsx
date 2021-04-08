@@ -11,7 +11,7 @@ import Board from './Board';
 import GameOver from './GameOver';
 import MainContainer from '../common/MainContainer';
 
-const Game = () => {
+const Game = ({navigation} : any) => {
 
   const [shapes, setShapes] = useState(getShapes());
   const [aiOne, setAIOne] = useState(createAIPlayer(2));
@@ -83,6 +83,14 @@ const Game = () => {
     }
   };
 
+  const help = () => {
+    navigation.navigate('Help');
+  }
+
+  const toMain = () => {
+    navigation.navigate('Start');
+  }
+
   return (
     <MainContainer>
       <GestureHandlerRootView>
@@ -95,7 +103,7 @@ const Game = () => {
             <Actions rotatePiece={rotatePiece} activeShape={activeShape} dragStartFn={(x: number, y: number) => {
                     setPartOfPieceDragged({x, y});
                     setMovableBoard(getMovableBoard(gameBoard, activeShape, y, x));
-                  }} restart={restart} skip={skip}/>
+                  }} restart={restart} skip={skip} toMain={toMain} help={help} />
             <Pieces clickFn={setActiveShape} shapes={shapes.filter((piece: Shape) => piece !== activeShape)} />
             <Pieces shapes={aiOne.pieces} aiPieces={true}/>
             <Pieces shapes={aiTwo.pieces} aiPieces={true}/>
