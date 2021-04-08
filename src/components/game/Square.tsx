@@ -69,19 +69,16 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
   });
 
   const Container = styled.View`
-    opacity: ${opacity};
     width: ${size}px;
     height: ${size}px;
   `;
   
   const View = styled.View`
     border: 1px solid ${COLORS.black};
-    position: absolute;
     z-index: 1;
     width: ${size}px;
     height: ${size}px;
     background: ${movable? COLORS.yellow : COLOR_MAP[Math.max(0, color)]};
-    padding-left: ${size / 3}px;
     opacity: ${opacity};
   `;
 
@@ -103,20 +100,6 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
     position: absolute;
   `;
 
-  const styles = StyleSheet.create({
-    glimmer: {
-      opacity: 0,
-      zIndex: 4,
-      width: size / 2,
-      height: size / 2,
-      borderRadius: 45,
-      backgroundColor: COLORS.white,
-      marginLeft: 5,
-      marginTop: 3,
-      position: 'absolute'
-    }
-  });
-
   const animation = !movable && color > 0 && squareSize === SquareSizes.M? <Animated.View style={[styles.glimmer, glimmer]} /> : <></>;
 
   return (
@@ -128,12 +111,26 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
       }}>
         <GradientB>
           <GradientA>
-            {/* { animation } */}
+            { animation }
           </GradientA>
         </GradientB>
       </View>
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  glimmer: {
+    opacity: 0,
+    zIndex: 4,
+    width: 10,
+    height: 10,
+    borderRadius: 45,
+    backgroundColor: COLORS.white,
+    marginLeft: 5,
+    marginTop: 3,
+    position: 'absolute'
+  }
+});
 
 export default Square;
