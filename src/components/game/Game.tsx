@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Actions from './Actions';
 import Pieces from './Pieces';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -7,12 +7,14 @@ import { DraxProvider } from 'react-native-drax';
 import styled from 'styled-components/native';
 import {createBoard, placePiece, getMovableBoard, getEmptyMovableBoard} from '../../logic/Blox';
 import {makeAIMove, AI, createAIPlayer} from '../../logic/AI';
+import {Difficulty} from '../../logic/Difficulty';
 import Board from './Board';
 import GameOver from './GameOver';
 import MainContainer from '../common/MainContainer';
 
-const Game = ({navigation} : any) => {
+const Game = ({navigation, route} : any) => {
 
+  const [difficulty, setDifficulty] = useState(route.params.difficulty);
   const [shapes, setShapes] = useState(getShapes());
   const [aiOne, setAIOne] = useState(createAIPlayer(2));
   const [aiTwo, setAITwo] = useState(createAIPlayer(3));
@@ -21,6 +23,11 @@ const Game = ({navigation} : any) => {
   const [movableBoard, setMovableBoard] = useState(getEmptyMovableBoard());
   const [partOfPieceDragged, setPartOfPieceDragged] = useState({x: 0, y: 0});
   const [gameOver, setGameOver] = useState(false);
+
+  useEffect(() => {
+    setDifficulty(route.params.difficulty);
+    restart();
+  }, [route.params.difficulty])
 
   const rotatePiece = (direction: Direction) => {
     const rotatedShape = rotate(activeShape, direction)
@@ -64,7 +71,7 @@ const Game = ({navigation} : any) => {
   };
 
   const restart = () => {
-    setGameBoard(createBoard());
+    let board = createBoard();
     const pieces = getShapes();
     setShapes(pieces);
     setAIOne(createAIPlayer(2));
@@ -72,6 +79,13 @@ const Game = ({navigation} : any) => {
     setActiveShape(pieces[0]);
     setGameOver(false);
     setMovableBoard(getEmptyMovableBoard());
+    if (difficulty === Difficulty.HARD || difficulty === Difficulty.EXPERT) {
+      board = moveAI(board, aiTwo, setAITwo);
+      if (difficulty === Difficulty.EXPERT) {
+        board = moveAI(board, aiOne, setAIOne);
+      } 
+    }
+    setGameBoard(board);
   };
 
   const skip = () => {

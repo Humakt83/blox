@@ -128,7 +128,7 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
       }}>
         <GradientB>
           <GradientA>
-            { animation }
+            {/* { animation } */}
           </GradientA>
         </GradientB>
       </View>
