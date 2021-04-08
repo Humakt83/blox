@@ -15,8 +15,9 @@ function getPossibleMoves(board: number[][], shape: Shape) : {y: number, x: numb
 }
 
 export function makeAIMove(board: number[][], shapes: Shape[]) : {board: number[][], usedShape: Shape | null} {
+  const newBoard = [...board];
   if (shapes.length < 1) {
-    return {board, usedShape: null};
+    return {board: newBoard, usedShape: null};
   }
   let shape = randomShape(shapes);
   let moves : {y: number, x: number}[] = [];
@@ -24,7 +25,7 @@ export function makeAIMove(board: number[][], shapes: Shape[]) : {board: number[
   while (moves.length < 1 && timesShapePicked <= shapes.length) {
     let timesRotated = 0;
     while (moves.length < 1 && timesRotated < 3) {
-      moves = getPossibleMoves(board, shape);
+      moves = getPossibleMoves(newBoard, shape);
       if (moves.length < 1) {
         shape = rotate(shape, Direction.CLOCKWISE);
         timesRotated++;
@@ -37,9 +38,9 @@ export function makeAIMove(board: number[][], shapes: Shape[]) : {board: number[
   }
   if (moves.length > 0) {
     const randomMove = moves[Math.floor(Math.random() * moves.length)];
-    return {board: placePiece(board, shape, randomMove.y, randomMove.x), usedShape: shape};
+    return {board: placePiece(newBoard, shape, randomMove.y, randomMove.x), usedShape: shape};
   }
-  return {board, usedShape: null};
+  return {board: newBoard, usedShape: null};
 }
 
 export class AI {

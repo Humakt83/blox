@@ -103,12 +103,12 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
   const animation = !movable && color > 0 && squareSize === SquareSizes.M? <Animated.View style={[styles.glimmer, glimmer]} /> : <></>;
 
   return (
-    <Container>
-      <View onTouchStart={() => {
-        if (dragStartFn) {
-          dragStartFn(x, y);
-        }
-      }}>
+    <Container onTouchStart={() => {
+      if (dragStartFn) {
+        dragStartFn(x, y);
+      }
+    }}>
+      <View>
         <GradientB>
           <GradientA>
             { animation }
