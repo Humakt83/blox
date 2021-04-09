@@ -4,11 +4,10 @@ import styled from 'styled-components/native';
 import {COLORS} from '../../Constants';
 
 type Props = {
-  content: string
+  content: string;
 };
 
-const Paragraph : React.FC<Props> = ({content}) => {
-
+const Paragraph: React.FC<Props> = ({content}) => {
   return (
     <Block>
       <Text>{content}</Text>
@@ -26,6 +25,6 @@ const Block = styled.View`
 
 const Text = styled.Text`
   margin-bottom: 10px;
-`
+`;
 
 export default Paragraph;

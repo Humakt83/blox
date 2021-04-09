@@ -3,13 +3,12 @@ import styled from 'styled-components/native';
 import {COLORS} from '../../Constants';
 
 type Props = {
-  clickFn: Function,
-  text: string,
-  disabled?: boolean,
-}
+  clickFn: Function;
+  text: string;
+  disabled?: boolean;
+};
 
 const ActionButton: React.FC<Props> = ({clickFn, text, disabled = false}) => {
-
   const Button = styled.TouchableOpacity`
     width: 80px;
     height: 30px;
@@ -23,11 +22,11 @@ const ActionButton: React.FC<Props> = ({clickFn, text, disabled = false}) => {
     if (!disabled) {
       clickFn();
     }
-  }
+  };
 
   return (
     <Button onPress={click}>
-        <ButtonText>{text}</ButtonText>
+      <ButtonText>{text}</ButtonText>
     </Button>
   );
 };

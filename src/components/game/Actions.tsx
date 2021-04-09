@@ -1,22 +1,29 @@
 import React from 'react';
-import { Direction, Shape } from '../../logic/Block';
-import { DraxView } from 'react-native-drax';
+import {Direction, Shape} from '../../logic/Block';
+import {DraxView} from 'react-native-drax';
 import styled from 'styled-components/native';
 import Piece from './Piece';
 import ActionButton from '../common/ActionButton';
 
 type Props = {
-  rotatePiece: Function,
-  activeShape: Shape,
-  restart: Function,
-  skip: Function,
-  dragStartFn: Function,
-  help: Function,
-  toMain: Function
-}
+  rotatePiece: Function;
+  activeShape: Shape;
+  restart: Function;
+  skip: Function;
+  dragStartFn: Function;
+  help: Function;
+  toMain: Function;
+};
 
-const Actions: React.FC<Props> = ({rotatePiece, activeShape, restart, skip, dragStartFn, help, toMain}) => {
-
+const Actions: React.FC<Props> = ({
+  rotatePiece,
+  activeShape,
+  restart,
+  skip,
+  dragStartFn,
+  help,
+  toMain,
+}) => {
   return (
     <View>
       <CommandMenu>
@@ -28,7 +35,7 @@ const Actions: React.FC<Props> = ({rotatePiece, activeShape, restart, skip, drag
           <RotateButtonText>↩️</RotateButtonText>
         </RotateButton>
         <DraxView payload={activeShape}>
-          <Piece large={true} shape={activeShape} dragStartFn={dragStartFn}/>
+          <Piece large={true} shape={activeShape} dragStartFn={dragStartFn} />
         </DraxView>
         <RotateButton onPress={() => rotatePiece(Direction.COUNTERCLOCKWISE)}>
           <RotateButtonText>↪️</RotateButtonText>
@@ -49,7 +56,7 @@ const View = styled.View`
 
 const RotateButton = styled.TouchableOpacity`
   width: 30px;
-  height: 30px;  
+  height: 30px;
   align-items: center;
   margin: 0 5px;
   justify-content: center;

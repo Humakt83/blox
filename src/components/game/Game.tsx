@@ -1,19 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import Actions from './Actions';
 import Pieces from './Pieces';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {rotate, Direction, Shape, getShapes} from '../../logic/Block';
-import { DraxProvider } from 'react-native-drax';
+import {DraxProvider} from 'react-native-drax';
 import styled from 'styled-components/native';
-import {createBoard, placePiece, getMovableBoard, getEmptyMovableBoard} from '../../logic/Blox';
+import {
+  createBoard,
+  placePiece,
+  getMovableBoard,
+  getEmptyMovableBoard,
+} from '../../logic/Blox';
 import {makeAIMove, AI, createAIPlayer} from '../../logic/AI';
 import {Difficulty} from '../../logic/Difficulty';
 import Board from './Board';
 import GameOver from './GameOver';
 import MainContainer from '../common/MainContainer';
 
-const Game = ({navigation, route} : any) => {
-
+const Game = ({navigation, route}: any) => {
   const [difficulty, setDifficulty] = useState(route.params.difficulty);
   const [shapes, setShapes] = useState(getShapes());
   const [aiOne, setAIOne] = useState(createAIPlayer(2));
@@ -26,11 +30,11 @@ const Game = ({navigation, route} : any) => {
 
   useEffect(() => {
     setDifficulty(route.params.difficulty);
-    restart();
-  }, [route.params.difficulty])
+    return restart();
+  }, [route.params.difficulty]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const rotatePiece = (direction: Direction) => {
-    const rotatedShape = rotate(activeShape, direction)
+    const rotatedShape = rotate(activeShape, direction);
     const filteredPieces = shapes.filter((val: Shape) => val !== activeShape);
     filteredPieces.push(rotatedShape);
     setShapes(filteredPieces);
@@ -47,10 +51,12 @@ const Game = ({navigation, route} : any) => {
       setAI(ai);
       return board;
     }
-    ai.pieces = ai.pieces.filter(piece => piece.name !== aiMove.usedShape?.name);
+    ai.pieces = ai.pieces.filter(
+      piece => piece.name !== aiMove.usedShape?.name,
+    );
     setAI(ai);
     return aiMove.board;
-  }
+  };
 
   const putPiece = (payload: Shape, row: number, column: number) => {
     if (movableBoard[row][column]) {
@@ -75,16 +81,18 @@ const Game = ({navigation, route} : any) => {
     let board = createBoard();
     const pieces = getShapes();
     setShapes(pieces);
-    setAIOne(createAIPlayer(2));
-    setAITwo(createAIPlayer(3));
+    const ai1 = createAIPlayer(2);
+    setAIOne(ai1);
+    const ai2 = createAIPlayer(3);
+    setAITwo(ai2);
     setActiveShape(pieces[0]);
     setGameOver(false);
     setMovableBoard(getEmptyMovableBoard());
     if (difficulty === Difficulty.HARD || difficulty === Difficulty.EXPERT) {
-      board = moveAI(board, aiTwo, setAITwo);
+      board = moveAI(board, ai2, setAITwo);
       if (difficulty === Difficulty.EXPERT) {
-        board = moveAI(board, aiOne, setAIOne);
-      } 
+        board = moveAI(board, ai1, setAIOne);
+      }
     }
     setGameBoard(board);
   };
@@ -103,28 +111,41 @@ const Game = ({navigation, route} : any) => {
 
   const help = () => {
     navigation.navigate('Help');
-  }
+  };
 
   const toMain = () => {
     navigation.navigate('Start');
-  }
+  };
 
   return (
     <MainContainer>
       <GestureHandlerRootView>
         <DraxProvider>
-          {
-            gameOver ? <GameOver board={gameBoard} restart={restart}/> : <></>
-          }
-          <Board gameBoard={gameBoard} movableBoard={movableBoard} putPiece={putPiece}/>
+          {gameOver ? <GameOver board={gameBoard} restart={restart} /> : <></>}
+          <Board
+            gameBoard={gameBoard}
+            movableBoard={movableBoard}
+            putPiece={putPiece}
+          />
           <View>
-            <Actions rotatePiece={rotatePiece} activeShape={activeShape} dragStartFn={(x: number, y: number) => {
-                    setPartOfPieceDragged({x, y});
-                    setMovableBoard(getMovableBoard(gameBoard, activeShape, y, x));
-                  }} restart={restart} skip={skip} toMain={toMain} help={help} />
-            <Pieces clickFn={setActiveShape} shapes={shapes.filter((piece: Shape) => piece !== activeShape)} />
-            <Pieces shapes={aiOne.pieces} aiPieces={true}/>
-            <Pieces shapes={aiTwo.pieces} aiPieces={true}/>
+            <Actions
+              rotatePiece={rotatePiece}
+              activeShape={activeShape}
+              dragStartFn={(x: number, y: number) => {
+                setPartOfPieceDragged({x, y});
+                setMovableBoard(getMovableBoard(gameBoard, activeShape, y, x));
+              }}
+              restart={restart}
+              skip={skip}
+              toMain={toMain}
+              help={help}
+            />
+            <Pieces
+              clickFn={setActiveShape}
+              shapes={shapes.filter((piece: Shape) => piece !== activeShape)}
+            />
+            <Pieces shapes={aiOne.pieces} aiPieces={true} />
+            <Pieces shapes={aiTwo.pieces} aiPieces={true} />
           </View>
         </DraxProvider>
       </GestureHandlerRootView>

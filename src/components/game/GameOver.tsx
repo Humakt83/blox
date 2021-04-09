@@ -5,25 +5,37 @@ import {flatten} from 'lodash';
 import ActionButton from '../common/ActionButton';
 
 type Props = {
-  board: number[][],
-  restart: Function
-}
+  board: number[][];
+  restart: Function;
+};
 
-const GameOver : React.FC<Props> = ({board, restart}) => {
-
-  const getPlayerStats = (color: number, board: number[][]): {name: string, amount: number} => {
-    const name = Object.keys(COLORS).find((k: string, index: number) => PLAYER_COLOR_MAP[color] === Object.values(COLORS)[index]) || 'unknown';
-    const amount = flatten(board).filter((column: number) => column === color + 1).length;
+const GameOver: React.FC<Props> = ({board, restart}) => {
+  const getPlayerStats = (
+    color: number,
+    gameBoard: number[][],
+  ): {name: string; amount: number} => {
+    const name =
+      Object.keys(COLORS).find(
+        (k: string, index: number) =>
+          PLAYER_COLOR_MAP[color] === Object.values(COLORS)[index],
+      ) || 'unknown';
+    const amount = flatten(gameBoard).filter(
+      (column: number) => column === color + 1,
+    ).length;
     return {name, amount};
   };
 
-  const getWinnerText = (stats: {name: string, amount: number}[] ): string => {
-    const winner = stats.reduce((prev, next) => next.amount > prev.amount ? next : prev);
+  const getWinnerText = (stats: {name: string; amount: number}[]): string => {
+    const winner = stats.reduce((prev, next) =>
+      next.amount > prev.amount ? next : prev,
+    );
     const isDraw = stats.filter(st => st.amount === winner.amount).length > 1;
-    return isDraw? 'DRAW!' : `${winner.name} IS VICTORIOUS!`;
-  }
+    return isDraw ? 'DRAW!' : `${winner.name} IS VICTORIOUS!`;
+  };
 
-  const playerStats = PLAYER_COLOR_MAP.map((color: string, index: number) => getPlayerStats(index, board));
+  const playerStats = PLAYER_COLOR_MAP.map((color: string, index: number) =>
+    getPlayerStats(index, board),
+  );
 
   return (
     <Shadow>
@@ -32,15 +44,16 @@ const GameOver : React.FC<Props> = ({board, restart}) => {
         <TitleText>{getWinnerText(playerStats)}</TitleText>
         {playerStats.map((stats, index) => {
           return (
-            <Text key={`stats-${index}`}>{stats.name}: {stats.amount}</Text>
-          )
+            <Text key={`stats-${index}`}>
+              {stats.name}: {stats.amount}
+            </Text>
+          );
         })}
         <ActionButton text="RESTART" clickFn={restart} />
       </Container>
     </Shadow>
   );
 };
-
 
 const Shadow = styled.View`
   position: absolute;
@@ -51,7 +64,7 @@ const Shadow = styled.View`
   opacity: 0.8;
   align-items: center;
 `;
-  
+
 const Container = styled.View`
   display: flex;
   border-radius: 3px;
@@ -61,7 +74,7 @@ const Container = styled.View`
   background: ${COLORS.black};
   width: 80%;
 `;
-  
+
 const TitleText = styled.Text`
     color: ${COLORS.white}
     font-size: 24px;

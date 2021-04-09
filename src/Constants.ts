@@ -7,8 +7,7 @@ export const COLORS = {
   blue: '#1122FF',
   yellow: '#EEEE11',
   black: '#112233',
-  lightgray: '#AAAAAA'
-}
+  lightgray: '#AAAAAA',
+};
 
 export const PLAYER_COLOR_MAP = [COLORS.red, COLORS.black, COLORS.blue];
-

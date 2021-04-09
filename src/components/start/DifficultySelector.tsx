@@ -1,24 +1,35 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import ActionButton from '../common/ActionButton';
 import styled from 'styled-components/native';
-import {Difficulty} from '../../logic/Difficulty'
+import {Difficulty} from '../../logic/Difficulty';
 import {COLORS} from '../../Constants';
 
 type Props = {
-  difficulty: Difficulty,
-  setDifficultyFn: Function
+  difficulty: Difficulty;
+  setDifficultyFn: Function;
 };
 
 const DifficultySelector: React.FC<Props> = ({difficulty, setDifficultyFn}) => {
-
   return (
     <View>
       <Text>Difficulty</Text>
       <ButtonsView>
-        <ActionButton text="NORMAL" clickFn={() => setDifficultyFn(Difficulty.NORMAL)} disabled={difficulty === Difficulty.NORMAL}/>
-        <ActionButton text="HARD" clickFn={() => setDifficultyFn(Difficulty.HARD)} disabled={difficulty === Difficulty.HARD}/>
-        <ActionButton text="EXPERT" clickFn={() => setDifficultyFn(Difficulty.EXPERT)} disabled={difficulty === Difficulty.EXPERT}/>
+        <ActionButton
+          text="NORMAL"
+          clickFn={() => setDifficultyFn(Difficulty.NORMAL)}
+          disabled={difficulty === Difficulty.NORMAL}
+        />
+        <ActionButton
+          text="HARD"
+          clickFn={() => setDifficultyFn(Difficulty.HARD)}
+          disabled={difficulty === Difficulty.HARD}
+        />
+        <ActionButton
+          text="EXPERT"
+          clickFn={() => setDifficultyFn(Difficulty.EXPERT)}
+          disabled={difficulty === Difficulty.EXPERT}
+        />
       </ButtonsView>
     </View>
   );
