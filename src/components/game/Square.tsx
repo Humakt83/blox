@@ -1,15 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { StyleSheet, } from 'react-native';
 import { COLORS, PLAYER_COLOR_MAP } from '../../Constants';
-
-import Animated, {
-  withTiming,
-  withRepeat,
-  useAnimatedStyle,
-  withSequence,
-  Easing
-} from 'react-native-reanimated';
 
 export enum SquareSizes {
   XS, S, M
@@ -41,32 +32,6 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
 
   const opacity = color === -1 ? 0 : 1;
   const size = convertSize(squareSize) ;
-
-  const glimmer = useAnimatedStyle(() => {
-    return {
-      opacity: withRepeat(withSequence(withTiming(1, {
-        duration: 2000,
-        easing: Easing.inOut(Easing.cubic)}),
-        withTiming(0, {
-          duration: 2000,
-          easing: Easing.inOut(Easing.cubic)
-        })), -1, true),
-      marginLeft: withRepeat(withSequence(withTiming(5, {
-        duration: 1000,
-        easing: Easing.inOut(Easing.cubic)}),
-        withTiming(20, {
-          duration: 1000,
-          easing: Easing.inOut(Easing.cubic)
-        })), -1, true),
-      marginTop: withRepeat(withSequence(withTiming(3, {
-        duration: 1000,
-        easing: Easing.inOut(Easing.cubic)}),
-        withTiming(10, {
-          duration: 1000,
-          easing: Easing.inOut(Easing.cubic)
-        })), -1, true)
-    };
-  });
 
   const Container = styled.View`
     width: ${size}px;
@@ -100,8 +65,6 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
     position: absolute;
   `;
 
-  const animation = !movable && color > 0 && squareSize === SquareSizes.M? <Animated.View style={[styles.glimmer, glimmer]} /> : <></>;
-
   return (
     <Container onTouchStart={() => {
       if (dragStartFn) {
@@ -111,26 +74,11 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
       <View>
         <GradientB>
           <GradientA>
-            { animation }
           </GradientA>
         </GradientB>
       </View>
     </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  glimmer: {
-    opacity: 0,
-    zIndex: 4,
-    width: 10,
-    height: 10,
-    borderRadius: 45,
-    backgroundColor: COLORS.white,
-    marginLeft: 5,
-    marginTop: 3,
-    position: 'absolute'
-  }
-});
 
 export default Square;
