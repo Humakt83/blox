@@ -5,6 +5,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {rotate, Direction, Shape, getShapes} from '../../logic/Block';
 import {DraxProvider} from 'react-native-drax';
 import styled from 'styled-components/native';
+import {StyleSheet, Dimensions, View} from 'react-native';
 import {
   createBoard,
   placePiece,
@@ -13,8 +14,8 @@ import {
 } from '../../logic/Blox';
 import {makeAIMove, AI, createAIPlayer} from '../../logic/AI';
 import {Difficulty} from '../../logic/Difficulty';
-import Board from './Board';
 import GameOver from './GameOver';
+import Board from './Board';
 import MainContainer from '../common/MainContainer';
 
 const Game = ({navigation, route}: any) => {
@@ -27,6 +28,13 @@ const Game = ({navigation, route}: any) => {
   const [movableBoard, setMovableBoard] = useState(getEmptyMovableBoard());
   const [partOfPieceDragged, setPartOfPieceDragged] = useState({x: 0, y: 0});
   const [gameOver, setGameOver] = useState(false);
+  const [containerLayoutStyle, setContainerLayoutStyle] = useState(
+    styles.containerPortrait,
+  );
+
+  const [sectionLayoutStyle, setSectionLayoutStyle] = useState(
+    styles.sectionPortrait,
+  );
 
   useEffect(() => {
     setDifficulty(route.params.difficulty);
@@ -117,17 +125,29 @@ const Game = ({navigation, route}: any) => {
     navigation.navigate('Start');
   };
 
+  const changeContainerStyle = () => {
+    const {width, height} = Dimensions.get('window');
+    if (width > height) {
+      setContainerLayoutStyle(styles.containerLandscape);
+      setSectionLayoutStyle(styles.sectionLandscape);
+    } else {
+      setContainerLayoutStyle(styles.containerPortrait);
+      setSectionLayoutStyle(styles.sectionPortrait);
+    }
+  };
+
   return (
     <MainContainer>
-      <GestureHandlerRootView>
+      <GestureHandlerRootView onLayout={changeContainerStyle}>
         <DraxProvider>
+          <View style={containerLayoutStyle}>
           {gameOver ? <GameOver board={gameBoard} restart={restart} /> : <></>}
           <Board
             gameBoard={gameBoard}
             movableBoard={movableBoard}
             putPiece={putPiece}
           />
-          <View>
+          <SectionView style={sectionLayoutStyle}>
             <Actions
               rotatePiece={rotatePiece}
               activeShape={activeShape}
@@ -146,6 +166,7 @@ const Game = ({navigation, route}: any) => {
             />
             <Pieces shapes={aiOne.pieces} aiPieces={true} />
             <Pieces shapes={aiTwo.pieces} aiPieces={true} />
+          </SectionView>
           </View>
         </DraxProvider>
       </GestureHandlerRootView>
@@ -153,10 +174,26 @@ const Game = ({navigation, route}: any) => {
   );
 };
 
-const View = styled.View`
+const SectionView = styled.View`
   display: flex;
   margin-top: 15px;
   align-items: center;
 `;
+
+const styles = StyleSheet.create({
+  containerPortrait: {
+    flex: 0,
+  },
+  containerLandscape: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  sectionPortrait: {
+    maxWidth: '100%'
+  },
+  sectionLandscape: {
+    maxWidth: '60%'
+  }
+});
 
 export default Game;
