@@ -50,8 +50,6 @@ const View = styled.View`
 const RotateButton = styled.TouchableOpacity`
   width: 30px;
   height: 30px;  
-  background-color: rgb(46, 185, 250);
-  border-radius: 15px;
   align-items: center;
   margin: 0 5px;
   justify-content: center;
