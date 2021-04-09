@@ -95,6 +95,9 @@ const Game = ({navigation, route} : any) => {
     } else {
       let board = moveAI(gameBoard, aiOne, setAIOne);
       setGameBoard(moveAI(board, aiTwo, setAITwo));
+      if (aiOne.skipping && aiTwo.skipping) {
+        setGameOver(true);
+      }
     }
   };
 
