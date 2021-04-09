@@ -23,7 +23,7 @@ const Board: React.FC<Props> = ({gameBoard, putPiece, movableBoard}) => {
                     <DraxView 
                         onReceiveDragDrop={({ dragged: { payload } }) => putPiece(payload, index, indexCol)}
                         key={`drax-${index}-${indexCol}`}>
-                      <Square color={column} movable={movableBoard[index][indexCol]} key={`col-${index}-${indexCol}`}/>
+                      <Square color={column} movable={movableBoard[index][indexCol]} key={`col-${index}-${indexCol}`} clickFn={() => putPiece(undefined, index, indexCol)}/>
                     </DraxView>
                   )
                 })

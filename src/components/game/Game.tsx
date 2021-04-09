@@ -54,12 +54,13 @@ const Game = ({navigation, route} : any) => {
 
   const putPiece = (payload: Shape, row: number, column: number) => {
     if (movableBoard[row][column]) {
+      const piece = payload || activeShape;
       const {x, y} = partOfPieceDragged;
-      let newBoard = placePiece(gameBoard, payload, row, column, y, x);
+      let newBoard = placePiece(gameBoard, piece, row, column, y, x);
       newBoard = moveAI(newBoard, aiOne, setAIOne);
       newBoard = moveAI(newBoard, aiTwo, setAITwo);
       setGameBoard(newBoard);
-      const filteredPieces = shapes.filter((val: Shape) => val !== payload);
+      const filteredPieces = shapes.filter((val: Shape) => val !== piece);
       setShapes(filteredPieces);
       if (filteredPieces.length < 1) {
         setGameOver(true);

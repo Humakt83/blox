@@ -25,10 +25,11 @@ type Props = {
   color?: number,
   movable?: boolean,
   dragStartFn?: Function,
+  clickFn?: Function,
   squareSize?: SquareSizes
 }
 
-const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn, squareSize = SquareSizes.M}) => {
+const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn, clickFn, squareSize = SquareSizes.M}) => {
 
   const opacity = color === -1 ? 0 : 1;
   const size = convertSize(squareSize) ;
@@ -66,7 +67,11 @@ const Square: React.FC<Props> = ({x, y, color = 0, movable = false, dragStartFn,
   `;
 
   return (
-    <Container onTouchStart={() => {
+    <Container onTouchEnd={() => {
+      if (clickFn) {
+        clickFn(x, y)
+      }
+    }} onTouchStart={() => {
       if (dragStartFn) {
         dragStartFn(x, y);
       }
