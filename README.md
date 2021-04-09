@@ -1,5 +1,5 @@
-# blox
-blox board game for mobile
+# bloxrox
+bloxrox board game for mobile
 
 ## Installation and Usage
 
